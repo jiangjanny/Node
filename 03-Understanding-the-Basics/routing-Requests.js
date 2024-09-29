@@ -21,20 +21,10 @@ const server = http.createServer((req, res) => {
     }
 
     if (url === '/message' && method === 'POST') {
-        const body = [];
-        req.on('data', (chunk) => {
-            body.push(chunk);
-        });
-
-        req.on('end', () => {
-            const parsedBody = Buffer.concat(body).toString();
-            const message = parsedBody.split('=')[1];  // 取得 message 的值
-            fs.writeFile('message.txt', message, (err) => {
-                res.statusCode = 302;
-                res.setHeader('Location', '/display-message');  // 重定向到顯示訊息的頁面
-                return res.end();
-            });
-        });
+        fs.writeFileSync('message.txt', 'DUMMY')
+        res.statusCode = 302
+        res.setHeader('Location', '/')
+        return res.end()
     }
 
     if (url === '/display-message') {
