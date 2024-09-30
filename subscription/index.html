@@ -1,0 +1,51 @@
+<!-- client.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebSocket Client</title>
+  </head>
+  <body>
+    <h1>WebSocket Client</h1>
+    <div id="news"></div>
+
+    <h2>Subscribe to Latest News</h2>
+    <form id="subscribeForm">
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required />
+      <button type="submit">Subscribe</button>
+    </form>
+
+    <script>
+      const ws = new WebSocket("ws://localhost:3000");
+
+      ws.onopen = () => {
+        console.log("Connected to WebSocket server");
+      };
+
+      ws.onmessage = (event) => {
+        const newsDiv = document.getElementById("news");
+        const message = event.data;
+
+        if (message === "Subscription successful") {
+          const form = document.getElementById("subscribeForm");
+          form.style.display = "none"; // 隱藏訂閱表單
+        } else {
+          newsDiv.innerHTML = `<p>${message}</p>`;
+        }
+      };
+
+      ws.onclose = () => {
+        console.log("Disconnected from WebSocket server");
+      };
+
+      const form = document.getElementById("subscribeForm");
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const email = document.getElementById("email").value;
+        ws.send(JSON.stringify({ type: "subscribe", email: email }));
+      });
+    </script>
+  </body>
+</html>
