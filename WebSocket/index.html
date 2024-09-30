@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+  <head>
+    <meta charset="UTF-8" />
+    <title>WebSocket 聊天室</title>
+  </head>
+  <body>
+    <h1>WebSocket 聊天室</h1>
+    <div id="chat">
+      <div id="messages"></div>
+      <input type="text" id="messageInput" placeholder="輸入訊息..." />
+      <button id="sendButton">發送</button>
+    </div>
+
+    <script>
+      const ws = new WebSocket("ws://localhost:3000");
+
+      ws.onopen = () => {
+        console.log("Connected to WebSocket server");
+      };
+
+      ws.onmessage = (event) => {
+        const messagesDiv = document.getElementById("messages");
+        const message = document.createElement("div");
+
+        // 檢查是否是 Blob 物件
+        if (event.data instanceof Blob) {
+          const reader = new FileReader();
+          reader.onload = () => {
+            message.textContent = reader.result;
+            messagesDiv.appendChild(message);
+          };
+          reader.readAsText(event.data);
+        } else {
+          message.textContent = event.data;
+          messagesDiv.appendChild(message);
+        }
+      };
+
+      ws.onclose = () => {
+        console.log("Disconnected from WebSocket server");
+      };
+
+      document.getElementById("sendButton").onclick = () => {
+        const input = document.getElementById("messageInput");
+        const message = input.value;
+
+        console.log("Sending message:", message);
+
+        ws.send(message);
+        input.value = "";
+      };
+    </script>
+  </body>
+</html>
