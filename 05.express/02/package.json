@@ -1,20 +1,20 @@
 {
-  "name": "understandingnpm-scripts",
+  "name": "nodejs-complete-guide",
   "version": "1.0.0",
-  "description": "",
+  "description": "Complete Node.js Guide",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon app.js",
     "start-server": "node app.js"
   },
-  "author": "",
+  "author": "Maximilian Schwarzmüller",
   "license": "ISC",
   "devDependencies": {
     "nodemon": "^3.1.7"
   },
   "dependencies": {
-    "express": "^4.21.0",
-    "understandingnpm-scripts": "file:"
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3"
   }
 }
